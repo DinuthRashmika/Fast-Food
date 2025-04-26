@@ -18,6 +18,7 @@
     <module>restaurantServices</module>
       <module>orderServices</module>
     <module>deliveryService</module>
+      <module>notificationServices</module>
   </modules>
   <build>
     <plugins>
