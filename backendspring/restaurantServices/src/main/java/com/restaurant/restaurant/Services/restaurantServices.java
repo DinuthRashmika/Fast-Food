@@ -130,13 +130,14 @@ public class restaurantServices {
     public List<resOrderDetailDTO> getOrderById(Long id) {
         String token = getToken();
 
-        return orderServiceWebClient.get()
-                .uri("/api/v1/orders/{id}", id)
+        List<resOrderDetailDTO> data = orderServiceWebClient.get()
+                .uri("http://localhost:8084/api/orders/restaurants/{id}", id)
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .bodyToFlux(resOrderDetailDTO.class)
                 .collectList()
                 .block();
+        return data;
     }
 
     public String getToken() {

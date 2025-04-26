@@ -96,7 +96,7 @@ public class OrderController {
     // ✅ GET ORDERS BY RESTAURANT ID
     @GetMapping("/restaurants/{restaurantId}")
     public ResponseEntity<List<Order>> getRestaurantOrders(@PathVariable String restaurantId) {
-        return ResponseEntity.ok(orderService.getRestaurantOrders(restaurantId));
+       return ResponseEntity.ok(orderService.getRestaurantOrders(restaurantId));
     }
 
     // ✅ DELETE ITEM FROM ORDER
