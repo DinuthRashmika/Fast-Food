@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DeliveryDTO {
     private String orderId;
+    private String driverId;
     private String restaurantId;
     private Location restaurantLocation;
     private Location customerLocation;

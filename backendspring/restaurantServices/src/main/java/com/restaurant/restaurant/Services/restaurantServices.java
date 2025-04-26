@@ -1,5 +1,6 @@
 package com.restaurant.restaurant.Services;
 
+import com.restaurant.restaurant.DTO.resOrderDetailDTO;
 import com.restaurant.restaurant.DTO.restaurantRequestDTO;
 import com.restaurant.restaurant.DTO.restaurantResponseDTO;
 import com.restaurant.restaurant.DTO.restaurantUserInfo;
@@ -7,113 +8,107 @@ import com.restaurant.restaurant.Model.restaurantModel;
 import com.restaurant.restaurant.Repository.restaurantRepo;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
 
-
 import java.util.List;
 
 @Service
 public class restaurantServices {
+
     @Autowired
-    public HttpServletRequest request;
+    private HttpServletRequest request;
+
     private final WebClient webClient;
+    private final WebClient orderServiceWebClient;
+    private final restaurantRepo restaurantRepo;
 
-    private  final restaurantRepo restaurantRepo;
-
-    public restaurantServices(WebClient webClient, restaurantRepo restaurantRepo) {
+    public restaurantServices(@Qualifier("webClient") WebClient webClient,
+                              @Qualifier("orderServiceWebClient") WebClient orderServiceWebClient,
+                              restaurantRepo restaurantRepo) {
         this.webClient = webClient;
+        this.orderServiceWebClient = orderServiceWebClient;
         this.restaurantRepo = restaurantRepo;
     }
 
-
-
     public restaurantResponseDTO addRestaurant(restaurantRequestDTO restaurant) {
         String token = getToken();
-        String  username= restaurant.getUsername();
+        String username = restaurant.getUsername();
+        String email = restaurant.getEmail();
+
         Boolean isTaken = webClient.get()
-                .uri("http://localhost:8082/api/v1/auth/checkEmailAvailability/{username}", username)
-                .header("Authorization", token)
+                .uri("/api/v1/auth/checkEmailAvailability/{username}", username)
+                .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .bodyToMono(Boolean.class)
                 .block();
 
-        String  email= restaurant.getEmail();
-        Boolean isExsit = webClient.get()
-                .uri("http://localhost:8082/api/v1/auth/emailavailable/{email}", email)
-                .header("Authorization", token)
+        Boolean isExist = webClient.get()
+                .uri("/api/v1/auth/emailavailable/{email}", email)
+                .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .bodyToMono(Boolean.class)
                 .block();
 
-        if(isTaken == false && isExsit == false) {
-            restaurantModel restaurantdata = new restaurantModel();
-            restaurantdata.setAddress(restaurant.getAddress());
-            restaurantdata.setUsername(restaurant.getUsername());
-            restaurantdata.setName(restaurant.getName());
-            restaurantdata.setEmail(restaurantdata.getEmail());
-            restaurantdata.setPhone(restaurant.getPhone());
-            restaurantdata.setCity(restaurant.getCity());
-            restaurantdata.setState(restaurant.getState());
-            restaurantdata.setZip(restaurant.getZip());
-            restaurantdata.setPhotoUrl(restaurant.getPhotoUrl());
-            restaurantRepo.save(restaurantdata);
+        if (Boolean.FALSE.equals(isTaken) && Boolean.FALSE.equals(isExist)) {
+            restaurantModel restaurantData = new restaurantModel();
+            restaurantData.setAddress(restaurant.getAddress());
+            restaurantData.setUsername(restaurant.getUsername());
+            restaurantData.setName(restaurant.getName());
+            restaurantData.setEmail(restaurant.getEmail()); // fixed small mistake
+            restaurantData.setPhone(restaurant.getPhone());
+            restaurantData.setCity(restaurant.getCity());
+            restaurantData.setState(restaurant.getState());
+            restaurantData.setZip(restaurant.getZip());
+            restaurantData.setPhotoUrl(restaurant.getPhotoUrl());
+            restaurantRepo.save(restaurantData);
 
-
-            restaurantUserInfo restaurantData = new restaurantUserInfo();
-            restaurantData.setUsername(username);
-            restaurantData.setEmail(restaurant.getEmail());
-            restaurantData.setFullName(restaurant.getName());
-            restaurantData.setPhoneNumber(restaurant.getPhone());
-            restaurantData.setPassword(restaurant.getPassword());
-            restaurantData.setRole("RESTAURANT_OWNER");
-            restaurantData.setLocation(restaurant.getAddress());
-
-            String url = "http://localhost:8082/api/v1/auth/cusregister";
+            restaurantUserInfo userInfo = new restaurantUserInfo();
+            userInfo.setUsername(username);
+            userInfo.setEmail(email);
+            userInfo.setFullName(restaurant.getName());
+            userInfo.setPhoneNumber(restaurant.getPhone());
+            userInfo.setPassword(restaurant.getPassword());
+            userInfo.setRole("RESTAURANT_OWNER");
+            userInfo.setLocation(restaurant.getAddress());
 
             webClient.post()
-                    .uri(url)
+                    .uri("/api/v1/auth/cusregister")
                     .header("Authorization", "Bearer " + token)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(restaurantData)
+                    .bodyValue(userInfo)
                     .retrieve()
                     .bodyToMono(String.class)
-                    .subscribe();
+                    .subscribe(); // optional: better to handle response properly
 
-
-            return new restaurantResponseDTO(restaurant.getName(),restaurant.getUsername(),restaurant.getAddress(),restaurant.getPhone(),"good",restaurant.getPhotoUrl());
+            return new restaurantResponseDTO(restaurant.getName(), restaurant.getUsername(), restaurant.getAddress(), restaurant.getPhone(), "good", restaurant.getPhotoUrl());
         }
-        return new restaurantResponseDTO(null,null,null,null,null,"This username already exist");
+
+        return new restaurantResponseDTO(null, null, null, null, null, "This username already exists");
     }
 
-    public String getToken() {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes != null) {
-            HttpServletRequest request = attributes.getRequest();
-            String token = request.getHeader("Authorization");
-            return token;
-        }
-        return null;
-    }
     public List<restaurantModel> getAllRest() {
         return restaurantRepo.findAll();
     }
 
     public restaurantResponseDTO updateRestaurant(restaurantRequestDTO restaurant) {
-        restaurantModel restaurantdata = new restaurantModel();
-        restaurantdata.setAddress(restaurant.getAddress());
-        restaurantdata.setName(restaurant.getName());
-        restaurantdata.setEmail(restaurantdata.getEmail());
-        restaurantdata.setPhone(restaurant.getPhone());
-        restaurantdata.setCity(restaurant.getCity());
-        restaurantdata.setState(restaurant.getState());
-        restaurantdata.setZip(restaurant.getZip());
-        restaurantRepo.save(restaurantdata);
+        restaurantModel restaurantData = new restaurantModel();
+        restaurantData.setAddress(restaurant.getAddress());
+        restaurantData.setName(restaurant.getName());
+        restaurantData.setUsername(restaurant.getUsername());
+        restaurantData.setEmail(restaurant.getEmail());
+        restaurantData.setPhone(restaurant.getPhone());
+        restaurantData.setCity(restaurant.getCity());
+        restaurantData.setState(restaurant.getState());
+        restaurantData.setZip(restaurant.getZip());
+        restaurantData.setPhotoUrl(restaurant.getPhotoUrl());
+        restaurantRepo.save(restaurantData);
 
-        return new restaurantResponseDTO(restaurant.getName(),restaurant.getUsername(),restaurant.getAddress(),restaurant.getPhone(),"good",restaurant.getPhotoUrl());
+        return new restaurantResponseDTO(restaurant.getName(), restaurant.getUsername(), restaurant.getAddress(), restaurant.getPhone(), "good", restaurant.getPhotoUrl());
     }
 
     public void deleteById(Long id) {
@@ -121,8 +116,36 @@ public class restaurantServices {
     }
 
     public restaurantResponseDTO getUserByIdDetails(Long id) {
-        restaurantModel restaurantdata = restaurantRepo.findById(id);
-        return new restaurantResponseDTO(restaurantdata.getName(),restaurantdata.getUsername(),restaurantdata.getAddress(),restaurantdata.getPhone(),"good",restaurantdata.getPhotoUrl());
+        restaurantModel restaurantData = restaurantRepo.findById(id);
+        return new restaurantResponseDTO(
+                restaurantData.getName(),
+                restaurantData.getUsername(),
+                restaurantData.getAddress(),
+                restaurantData.getPhone(),
+                "good",
+                restaurantData.getPhotoUrl()
+        );
     }
 
+    public List<resOrderDetailDTO> getOrderById(Long id) {
+        String token = getToken();
+
+        List<resOrderDetailDTO> data = orderServiceWebClient.get()
+                .uri("http://localhost:8084/api/orders/restaurants/{id}", id)
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .bodyToFlux(resOrderDetailDTO.class)
+                .collectList()
+                .block();
+        return data;
+    }
+
+    public String getToken() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("Authorization");
+        }
+        return null;
+    }
 }

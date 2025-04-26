@@ -37,7 +37,7 @@ public class OrderService {
                     item.setMenuItemId(itemDto.getMenuItemId());
                     item.setQuantity(itemDto.getQuantity());
                     item.setName("Item " + itemDto.getMenuItemId()); // Placeholder
-                    item.setPrice(10.0); // Example price
+                    item.setPrice(itemDto.getTotalPrice()); // Example price
                     return item;
                 })
                 .collect(Collectors.toList());
@@ -166,5 +166,9 @@ public class OrderService {
         order.setTotalPrice(updatedTotal);
 
         orderRepository.save(order);
+    }
+
+    public List<?> getOrderItems(String id) {
+        return orderRepository.findByRestaurantId(id);
     }
 }
