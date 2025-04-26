@@ -2,6 +2,7 @@ package com.restaurant.restaurant.Controller;
 
 import com.restaurant.restaurant.DTO.restaurantRequestDTO;
 import com.restaurant.restaurant.DTO.restaurantResponseDTO;
+import com.restaurant.restaurant.DTO.resOrderDetailDTO;
 import com.restaurant.restaurant.Model.restaurantModel;
 import com.restaurant.restaurant.Repository.restaurantRepo;
 import com.restaurant.restaurant.Services.restaurantServices;
@@ -52,6 +53,11 @@ public class restaurantController {
     public ResponseEntity<restaurantResponseDTO> getUserById(@PathVariable Long userId) {
 
         return ResponseEntity.status(HttpStatus.OK).body(restaurantServices.getUserByIdDetails(userId));
+    }
+
+    @GetMapping("/getorder/{userId}")
+    public ResponseEntity<List<resOrderDetailDTO>> getOrderById(@PathVariable Long userId) {
+        return  ResponseEntity.status(HttpStatus.OK).body(restaurantServices.getOrderById(userId));
     }
 
 }
