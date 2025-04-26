@@ -1,0 +1,40 @@
+package com.restaurant.restaurant.Controller;
+
+import com.restaurant.restaurant.Model.menuModel;
+import com.restaurant.restaurant.Services.menuServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+@RestController
+@RequestMapping("/api/v1/menu")
+public class menuController {
+
+    @Autowired
+    public menuServices menuServices;
+
+
+    @PostMapping("/add/{restaurantId}")
+    public ResponseEntity<menuModel> addMenu(@PathVariable Long restaurantId,@RequestBody menuModel dto) {
+        return ResponseEntity.ok(menuServices.addMenu(restaurantId,dto));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<menuModel>> getAllMenus() {
+        return ResponseEntity.ok(menuServices.getAllMenus());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<menuModel> getMenuById(@PathVariable Long id) {
+        return menuServices.getMenuById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMenu(@PathVariable Long id) {
+        menuServices.deleteMenu(id);
+        return ResponseEntity.ok("Menu deleted successfully");
+    }
+}
