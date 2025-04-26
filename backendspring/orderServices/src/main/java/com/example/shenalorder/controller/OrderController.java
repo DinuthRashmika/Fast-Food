@@ -168,4 +168,9 @@ public class OrderController {
     public ResponseEntity<String> paymentCancel() {
         return ResponseEntity.ok("Payment was cancelled");
     }
+
+    @GetMapping("/byrestruent/{id}")
+    public ResponseEntity<List<?>> getByRestriction(@PathVariable String id) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderItems(id));
+    }
 }

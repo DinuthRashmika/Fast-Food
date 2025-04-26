@@ -167,4 +167,8 @@ public class OrderService {
 
         orderRepository.save(order);
     }
+
+    public List<?> getOrderItems(String id) {
+        return orderRepository.findByRestaurantId(id);
+    }
 }
