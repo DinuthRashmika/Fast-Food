@@ -96,7 +96,7 @@ public class OrderController {
     // ✅ GET ORDERS BY RESTAURANT ID
     @GetMapping("/restaurants/{restaurantId}")
     public ResponseEntity<List<Order>> getRestaurantOrders(@PathVariable String restaurantId) {
-        return ResponseEntity.ok(orderService.getRestaurantOrders(restaurantId));
+       return ResponseEntity.ok(orderService.getRestaurantOrders(restaurantId));
     }
 
     // ✅ DELETE ITEM FROM ORDER
@@ -167,5 +167,10 @@ public class OrderController {
     @GetMapping("/payment/cancel")
     public ResponseEntity<String> paymentCancel() {
         return ResponseEntity.ok("Payment was cancelled");
+    }
+
+    @GetMapping("/byrestruent/{id}")
+    public ResponseEntity<List<?>> getByRestriction(@PathVariable String id) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderItems(id));
     }
 }
