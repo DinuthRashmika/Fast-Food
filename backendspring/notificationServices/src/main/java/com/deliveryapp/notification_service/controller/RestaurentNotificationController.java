@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deliveryapp.notification_service.model.Notification;
+import com.deliveryapp.notification_service.model.RestaurantNotification;
 import com.deliveryapp.notification_service.service.RestaurantNotificationService;
 
 @RestController
@@ -23,19 +24,19 @@ public class RestaurentNotificationController {
     
 
     @PostMapping("/new-order")
-    public ResponseEntity<Notification> RestaurentNewOrderNotification(@RequestBody Notification notification) {
+    public ResponseEntity<Notification> RestaurentNewOrderNotification(@RequestBody RestaurantNotification notification) {
         Notification savedNotification = restaurantNotificationService.RestaurentNewOrderNotification(notification);
         return ResponseEntity.ok(savedNotification);
     }
 
     @PostMapping("/order-accepted")
-    public ResponseEntity<Notification> RestaurantOrderAcceptedNotification(@RequestBody Notification notification) {
+    public ResponseEntity<Notification> RestaurantOrderAcceptedNotification(@RequestBody RestaurantNotification notification) {
         Notification savedNotification = restaurantNotificationService.RestaurantOrderAcceptedNotification(notification);
         return ResponseEntity.ok(savedNotification);
     }
 
     @PostMapping("/order-cancelled")
-    public ResponseEntity<Notification> RestaurantOrderCancelledNotification(@RequestBody Notification notification) {
+    public ResponseEntity<Notification> RestaurantOrderCancelledNotification(@RequestBody RestaurantNotification notification) {
         Notification savedNotification = restaurantNotificationService.RestaurantOrderCancelledNotification(notification);
         return ResponseEntity.ok(savedNotification);
     }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deliveryapp.notification_service.model.DeliveryNotification;
 import com.deliveryapp.notification_service.model.Notification;
 import com.deliveryapp.notification_service.service.DeliveryNotificationService;
 
@@ -22,19 +23,19 @@ public class DeliveryNotificationController {
     }
 
     @PostMapping("/delivery-assinged")
-    public ResponseEntity<Notification> sendDeliveryPersonAssignedNotification(@RequestBody Notification notification) {
+    public ResponseEntity<Notification> sendDeliveryPersonAssignedNotification(@RequestBody DeliveryNotification notification) {
         Notification savedNotification = deliveryNotificationService.DeliveryPersonAssignedNotification(notification);
         return ResponseEntity.ok(savedNotification);
     }
 
     @PostMapping("/on-the-way")
-    public ResponseEntity<Notification> sendDeliveryOnTheWayNotification(@RequestBody Notification notification) {
+    public ResponseEntity<Notification> sendDeliveryOnTheWayNotification(@RequestBody DeliveryNotification notification) {
         Notification savedNotification = deliveryNotificationService.DeliveryOnTheWayNotification(notification);
         return ResponseEntity.ok(savedNotification);
     }
 
     @PostMapping("/delivery-cancelled")
-    public ResponseEntity<Notification> sendDeliveryCanceledNotification(@RequestBody Notification notification) {
+    public ResponseEntity<Notification> sendDeliveryCanceledNotification(@RequestBody DeliveryNotification notification) {
         Notification savedNotification = deliveryNotificationService.DeliveryCanceledNotification(notification);
         return ResponseEntity.ok(savedNotification);
     }

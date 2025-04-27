@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.deliveryapp.notification_service.model.DeliveryNotification;
 import com.deliveryapp.notification_service.model.Notification;
 import com.deliveryapp.notification_service.repository.NotificationRepository;
 import com.deliveryapp.notification_service.service.notification_services.EmailService;
@@ -28,7 +29,7 @@ public class DeliveryNotificationService {
     }
 
     //Delivery Person Assigned notification - Delivery
-    public Notification DeliveryPersonAssignedNotification(Notification notification){
+    public Notification DeliveryPersonAssignedNotification(DeliveryNotification notification){
         notification.setTitle("Delivery Confirmed for OrderID " + notification.getOrderId());
         notification.setMessage("A delivery person has been assigned to order " + notification.getOrderId() +" .They'll reach your location soon");
         notification.setNotificationType("DELIVERY_CONFIRMED");
@@ -40,9 +41,11 @@ public class DeliveryNotificationService {
                 logger.info("Logger - Sending email to " + notification.getRecipientEmail() + " :loggers");
                 emailService.sendEmailToDeliveryPersonnal(
                     notification.getRecipientEmail(),   //Recipient email
-                    "Delivery Confirmed for OrderID " + notification.getOrderId(), //Real email - Subject
-                    "A delivery person has been assigned to order " + notification.getOrderId() +" .They'll reach your location soon!", //Real email - Body
-                    notification.getOrderId() //Order ID
+                    "A new Order Assigned! OrderID: " + notification.getOrderId(), //Real email - Subject
+                    "You have been assinged with a new order! Order ID is: " + notification.getOrderId() +" .Please be ready to get the order from the restaurent" + notification.getRestaurantName(), //Real email - Body
+                    notification.getOrderId(),//Order ID
+                    notification.getDeliveryAddress(),
+                    notification.getRestaurantName()
                 ); 
             }
 
@@ -64,8 +67,8 @@ public class DeliveryNotificationService {
         return notificationRepository.save(notification);
     }
 
-    //Delivery On the way - Delivery
-    public Notification DeliveryOnTheWayNotification(Notification notification){
+    //Delivery On the way - Delivery - oneth nh
+    public Notification DeliveryOnTheWayNotification(DeliveryNotification notification){
         notification.setTitle("Your Order is On the Way - Oder ID " + notification.getOrderId());
         notification.setMessage("The delivery person has picked up your order " + notification.getOrderId() + " .Get ready to receive it shortly!");
         notification.setNotificationType("DELIVERY_ON_THE_WAY");
@@ -79,7 +82,9 @@ public class DeliveryNotificationService {
                     notification.getRecipientEmail(),   //Recipient email
                     "Your Order is On the Way - Oder ID " + notification.getOrderId(), //Real email - Subject
                     "The delivery person has picked up your order " + notification.getOrderId() + " .Get ready to receive it shortly!", //Real email - Body
-                    notification.getOrderId() //Order ID
+                    notification.getOrderId(),//Order ID
+                    notification.getDeliveryAddress(),
+                    notification.getRestaurantName()
                 ); 
             }
 
@@ -101,8 +106,8 @@ public class DeliveryNotificationService {
     }
 
 
-    //Delivery Person Assigned notification - Delivery
-    public Notification DeliveryCanceledNotification(Notification notification){
+    //Delivery Cancelled from delivery person - Delivery
+    public Notification DeliveryCanceledNotification(DeliveryNotification notification){
         notification.setTitle("Order " + notification.getOrderId() + " Delivery Cancelled ");
         notification.setMessage("Your order's delivery has been cancelled due to unforeseen circumstances. You will be updated soon.");
         notification.setNotificationType("DELIVERY_CANCELED");
@@ -116,7 +121,9 @@ public class DeliveryNotificationService {
                     notification.getRecipientEmail(),   //Recipient email
                     "Order " + notification.getOrderId() + " Delivery Cancelled", //Real email - Subject
                     "Your order's delivery has been cancelled due to unforeseen circumstances. You will be updated soon.", //Real email - Body
-                    notification.getOrderId() //Order ID
+                    notification.getOrderId(),//Order ID
+                    notification.getDeliveryAddress(),
+                    notification.getRestaurantName()
                 ); 
             }
 

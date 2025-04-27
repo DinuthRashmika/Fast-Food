@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deliveryapp.notification_service.model.Notification;
+import com.deliveryapp.notification_service.model.RestaurantNotification;
 import com.deliveryapp.notification_service.repository.NotificationRepository;
 import com.deliveryapp.notification_service.service.notification_services.EmailService;
 import com.deliveryapp.notification_service.service.notification_services.SMSService;
@@ -34,9 +35,9 @@ public class RestaurantNotificationService {
     }
 
     //New Order notification -  Restaurant
-    public Notification RestaurentNewOrderNotification(Notification notification){
+    public Notification RestaurentNewOrderNotification(RestaurantNotification notification){
         notification.setTitle("New Order for the Restaurent! ");
-        notification.setMessage("A customer has placed a new order! Order ID: " + notification.getOrderId() + "Please confirm and start processing!");
+        notification.setMessage("A customer has placed a new order for your restaurant! Order ID: " + notification.getOrderId() + " Please confirm asap and start processing!");
         notification.setNotificationType("NEW_ORDER");
         notification.setTimestamp(LocalDateTime.now());
 
@@ -47,8 +48,11 @@ public class RestaurantNotificationService {
                 emailService.sendEmailToRestaurent(
                     notification.getRecipientEmail(),   //Recipient email
                     "New Order for the Restaurent!" , //Real email - Subject
-                    "A customer has placed a new order! Order ID: " + notification.getOrderId() + "Please confirm and start processing!", //Real email - Body
-                    notification.getOrderId() //Order ID
+                    "A customer has placed a new order for your restaurant! Order ID: " + notification.getOrderId() + "Please confirm asap and start processing!", //Real email - Body
+                    notification.getOrderId(),//Order ID
+                    notification.getTotal(),
+                    notification.getOrderedItems()
+
                 ); 
             }
 
@@ -71,9 +75,9 @@ public class RestaurantNotificationService {
 
 
     //Order Accepted notification - from Restaurant
-    public Notification RestaurantOrderAcceptedNotification(Notification notification){
+    public Notification RestaurantOrderAcceptedNotification(RestaurantNotification notification){
         notification.setTitle("Order Accepted from the Restaurant!");
-        notification.setMessage("Order ID " + notification.getOrderId() + "has been marked as accepted from the Restaurent!");
+        notification.setMessage("Order ID " + notification.getOrderId() + " has been marked as accepted from the Restaurent!");
         notification.setNotificationType("ORDER_ACCEPTED");
         notification.setTimestamp(LocalDateTime.now());
 
@@ -84,8 +88,10 @@ public class RestaurantNotificationService {
                 emailService.sendEmailToRestaurent(
                     notification.getRecipientEmail(),   
                     "Order Accepted from the Restaurant!" , 
-                    "Order ID " + notification.getOrderId() + "has been marked as accepted from the Restaurent!",
-                    notification.getOrderId() 
+                    "Order ID " + notification.getOrderId() + " has been marked as accepted from the Restaurent!",
+                    notification.getOrderId(),//Order ID
+                    notification.getTotal(),
+                    notification.getOrderedItems()
                 ); 
             }
 
@@ -108,7 +114,7 @@ public class RestaurantNotificationService {
 
 
     //Order Cancelled notification - Restaurant
-    public Notification RestaurantOrderCancelledNotification(Notification notification){
+    public Notification RestaurantOrderCancelledNotification(RestaurantNotification notification){
         notification.setTitle("Order Cancelled from the Restaurant");
         notification.setMessage("The recent order " + notification.getRecipientEmail() + " from your restaurant has been cancelled. Please check your dashboard for more details");
         notification.setNotificationType("ORDER_CANCELLED");
@@ -121,8 +127,10 @@ public class RestaurantNotificationService {
                 emailService.sendEmailToRestaurent(
                     notification.getRecipientEmail(),   
                     "Order Cancelled from the Restaurant" , 
-                    "The recent order " + notification.getOrderId() + " from your restaurant has been cancelled. Please check your dashboard for more details",
-                    notification.getOrderId() 
+                    "The recent order " + notification.getOrderId() + " from your restaurant has been cancelled. Please check your dashboard for more details.\nThe cancelled order details are as follows:",
+                    notification.getOrderId(),//Order ID
+                    notification.getTotal(),
+                    notification.getOrderedItems()
                 ); 
             }
 

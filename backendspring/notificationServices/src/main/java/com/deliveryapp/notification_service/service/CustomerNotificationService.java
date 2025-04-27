@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.deliveryapp.notification_service.model.CustomerNotification;
 import com.deliveryapp.notification_service.model.Notification;
 import com.deliveryapp.notification_service.repository.NotificationRepository;
 import com.deliveryapp.notification_service.service.notification_services.EmailService;
@@ -28,10 +29,11 @@ public class CustomerNotificationService {
     }
 
     //Order Confirmation notification - Customer
-    public Notification sendOrderConfirmNotification(Notification notification){
+    public Notification sendOrderConfirmNotification(CustomerNotification notification){
         notification.setTitle("Order Confirmed in OrderID " + notification.getOrderId());
         notification.setMessage("Your order " + notification.getOrderId() +" has been confirmed successfully!!");
         notification.setNotificationType("ORDER_CONFIRMED");
+        notification.setRestaurentName(notification.getRestaurentName());
         notification.setTimestamp(LocalDateTime.now());
 
         try {
@@ -42,8 +44,10 @@ public class CustomerNotificationService {
                 emailService.sendEmailToCustomer(
                     notification.getRecipientEmail(),   //Recipient email
                     "Order Confirmed in OrderID " + notification.getOrderId(), //Real email - Subject
-                    "Your order " + notification.getOrderId() +" has been confirmed successfully!", //Real email - Body
-                    notification.getOrderId() //Order ID
+                    "Your order " + notification.getOrderId() +" from " + notification.getRestaurentName() +" has been confirmed successfully!", //Real email - Body
+                    notification.getOrderId(), //Order ID
+                    notification.getRestaurentName(),
+                    notification.getTotal()
                 ); 
             }
 
@@ -53,9 +57,7 @@ public class CustomerNotificationService {
                 logger.info("Logger - Sending SMS to " + notification.getRecipientPhone() + " :loggers");
                 smsService.sendSMS(
                     notification.getRecipientPhone(), 
-                    "Hello Customer!\nYour order is on the way!\nOrder " + notification.getOrderId() +  " has been confirmed successfully!\n\nUber Eats Team ");
-
-                
+                    "Hello Customer!\nYour order is on the way!\nOrder " + notification.getOrderId() +  " has been confirmed successfully!\n\nUber Eats Team ");  
             }
 
         } catch (Exception e) {
@@ -67,8 +69,9 @@ public class CustomerNotificationService {
     }
 
 
+    //delivery person confirmed
     //Delivery Confirmation notification - Customer
-    public Notification sendOrderDeliveredNotification(Notification notification){
+    public Notification sendOrderDeliveredNotification(CustomerNotification notification){
         notification.setTitle("Order Delivered - OrderID " + notification.getOrderId());
         notification.setMessage("Your order " + notification.getOrderId() + " has been delivered successfully!!");
         notification.setNotificationType("ORDER_DELIVERED");
@@ -82,8 +85,10 @@ public class CustomerNotificationService {
                 emailService.sendEmailToCustomer(
                     notification.getRecipientEmail(),   // Recipient email
                     "Order Delivered - OrderID " + notification.getOrderId(), // Subject
-                    "Your order " + notification.getOrderId() + " has been delivered successfully!", // Body
-                    notification.getOrderId() // Order ID
+                    "Your order " + notification.getOrderId() + " has been delivered successfully to you! We may close the order now", // Body
+                    notification.getOrderId(), //Order ID
+                    notification.getRestaurentName(),
+                    notification.getTotal()
                 );
             }
 
@@ -106,9 +111,9 @@ public class CustomerNotificationService {
 
 
     //Payment Success notification - Customer
-    public Notification sendPaymentSuccessNotification(Notification notification) {
+    public Notification sendPaymentSuccessNotification(CustomerNotification notification) {
         notification.setTitle("Payment Successful for Order ID " + notification.getOrderId() + "!");
-        notification.setMessage("We’ve received your payment successfully. Thank you for your purchase with Our Ordering App!");
+        notification.setMessage("We’ve received your payment successfully. Thank you for your purchase with Fast Food!");
         notification.setNotificationType("PAYMENT_SUCCESS");
         notification.setTimestamp(LocalDateTime.now());
 
@@ -119,8 +124,10 @@ public class CustomerNotificationService {
                 emailService.sendEmailToCustomer(
                     notification.getRecipientEmail(),   //Recipient email
                     "Payment Successful for Order ID " + notification.getOrderId() + "!", //Real email - Subject
-                    "We’ve received your payment successfully. Thank you for your purchase with Our Ordering App!", //Real email - Body
-                    notification.getOrderId() //Order ID
+                    "We’ve received your payment successfully. Thank you for your purchase with Fast Food!", //Real email - Body
+                    notification.getOrderId(), //Order ID
+                    notification.getRestaurentName(),
+                    notification.getTotal()
                 ); 
             }
 
@@ -129,7 +136,7 @@ public class CustomerNotificationService {
                 logger.info("Logger - Sending SMS to " + notification.getRecipientPhone() + " :loggers");
                 smsService.sendSMS(
                     notification.getRecipientPhone(), 
-                    "Hello Customer! We’ve received your payment successfully for OrderID - "+ notification.getOrderId() +" .Thank you for your purchase with Our Ordering App!");
+                    "Hello Customer! We’ve received your payment successfully for OrderID - "+ notification.getOrderId() +" .Thank you for your purchase with Fast Food!");
                 
             }
 
@@ -205,7 +212,7 @@ public class CustomerNotificationService {
     //             emailService.sendEmailToCustomer(
     //                 notification.getRecipientEmail(),
     //                 "Payment Successful for Order ID " + notification.getOrderId() + "!",
-    //                 "We’ve received your payment successfully. Thank you for your purchase with Our Ordering App!",
+    //                 "We’ve received your payment successfully. Thank you for your purchase with Fast Food!",
     //                 notification.getOrderId()
     //             );
     //         }
@@ -215,7 +222,7 @@ public class CustomerNotificationService {
     //             logger.info("Logger - Sending SMS to " + notification.getRecipientPhone() + " :loggers");
     //             smsService.sendSMS(
     //                 notification.getRecipientPhone(), 
-    //                 "Hello Customer! We’ve received your payment successfully for OrderID - "+ notification.getOrderId() +" .Thank you for your purchase with Our Ordering App!");
+    //                 "Hello Customer! We’ve received your payment successfully for OrderID - "+ notification.getOrderId() +" .Thank you for your purchase with Fast Food!");
                 
     //         }
 

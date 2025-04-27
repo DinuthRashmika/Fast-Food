@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deliveryapp.notification_service.model.CustomerNotification;
 import com.deliveryapp.notification_service.model.Notification;
 import com.deliveryapp.notification_service.service.CustomerNotificationService;
 
@@ -23,21 +24,21 @@ public class CustomerNotificationController {
 
     //Order Confirmed
     @PostMapping("/order-confirmed")
-    public ResponseEntity<Notification> sendOrderConfirmationNotification(@RequestBody Notification notification){
+    public ResponseEntity<Notification> sendOrderConfirmationNotification(@RequestBody CustomerNotification notification){
         Notification savedNotification = notificationService.sendOrderConfirmNotification(notification);
         return ResponseEntity.ok(savedNotification);
     }
-
+    
     //Order Delivered 
     @PostMapping("/order-delivered")
-    public ResponseEntity<Notification> sendOrderDeliveredNotification(@RequestBody Notification notification) {
+    public ResponseEntity<Notification> sendOrderDeliveredNotification(@RequestBody CustomerNotification notification) {
         Notification savedNotification = notificationService.sendOrderDeliveredNotification(notification);
         return ResponseEntity.ok(savedNotification); 
     }
 
     //Payment Successful
     @PostMapping("/payment-success")
-    public ResponseEntity<Notification> sendPaymentSuccessNotification(@RequestBody Notification notification) {
+    public ResponseEntity<Notification> sendPaymentSuccessNotification(@RequestBody CustomerNotification notification) {
         Notification savedNotification = notificationService.sendPaymentSuccessNotification(notification);
         return ResponseEntity.ok(savedNotification); 
     }

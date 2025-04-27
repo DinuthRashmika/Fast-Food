@@ -3,6 +3,7 @@ package com.deliveryapp.notification_service.service.notification_services;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class EmailService {
     }
 
     //CUSTOMER EMAILS
-    public void sendEmailToCustomer(String toEmail, String subject, String body, String orderId) throws IOException {
+    public void sendEmailToCustomer(String toEmail, String subject, String body, String orderId, String restaurantName, double total) throws IOException {
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -74,7 +75,9 @@ public class EmailService {
                 String template = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 template = template.replace("{{title}}", subject)
                                 .replace("{{message}}", body)
-                                .replace("{{orderId}}", orderId);
+                                .replace("{{orderId}}", orderId)
+                                .replace("{{restaurantName}}", restaurantName)
+                                .replace("{{total}}", String.valueOf(total));
                 helper.setText(template, true);
             } 
 
@@ -94,7 +97,7 @@ public class EmailService {
 
 
     //RESTAURENT EMAILS
-    public void sendEmailToRestaurent(String toEmail, String subject, String body, String orderId) throws IOException {
+    public void sendEmailToRestaurent(String toEmail, String subject, String body, String orderId, double total, List<String> orderedItems) throws IOException {
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -107,9 +110,17 @@ public class EmailService {
             try(var inputStream = Objects.requireNonNull(EmailService.class.getResourceAsStream("/templates/htmltemplateRestaurent.html")) ) {
 
                 String template = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+                StringBuilder orderedItemsFormatted = new StringBuilder();
+                for (String item : orderedItems) {
+                    orderedItemsFormatted.append("- ").append(item).append("<br>");  // each item in a new line with HTML <br>
+                }
+
                 template = template.replace("{{title}}", subject)
                                 .replace("{{message}}", body)
-                                .replace("{{orderId}}", orderId);
+                                .replace("{{orderId}}", orderId)
+                                .replace("{{total}}", String.valueOf(total))
+                                .replace("{{orderedItems}}", orderedItemsFormatted.toString());
                 helper.setText(template, true);
             } 
 
@@ -129,7 +140,7 @@ public class EmailService {
 
 
     //DELIVERY EMAILS
-    public void sendEmailToDeliveryPersonnal(String toEmail, String subject, String body, String orderId) throws IOException {
+    public void sendEmailToDeliveryPersonnal(String toEmail, String subject, String body, String orderId, String deliveryAddress, String restaurantName) throws IOException {
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -144,7 +155,9 @@ public class EmailService {
                 String template = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 template = template.replace("{{title}}", subject)
                                 .replace("{{message}}", body)
-                                .replace("{{orderId}}", orderId);
+                                .replace("{{orderId}}", orderId)
+                                .replace("{{deliveryAddress}}", deliveryAddress)
+                                .replace("{{restaurantName}}", restaurantName);
                 helper.setText(template, true);
             } 
 
