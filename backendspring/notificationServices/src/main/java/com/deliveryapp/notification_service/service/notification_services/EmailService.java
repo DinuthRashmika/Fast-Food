@@ -3,6 +3,7 @@ package com.deliveryapp.notification_service.service.notification_services;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,6 +67,13 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
+            if (toEmail == null || toEmail.isEmpty() || orderId == null || orderId.isEmpty() || restaurantName == null || restaurantName.isEmpty() || total <= 0) {
+                toEmail = "pamalisr@gmail.com";  
+                orderId = "";  
+                restaurantName = "";
+                total = 0.0;
+            }
+
             helper.setFrom("sapunikasr@gmail.com");
             helper.setTo(toEmail);
             helper.setSubject(subject);
@@ -98,6 +106,13 @@ public class EmailService {
 
     //RESTAURENT EMAILS
     public void sendEmailToRestaurent(String toEmail, String subject, String body, String orderId, double total, List<String> orderedItems) throws IOException {
+
+        if (toEmail == null || toEmail.isEmpty() || orderId == null || orderId.isEmpty() || orderedItems == null || orderedItems.isEmpty() || total <= 0) {
+            toEmail = "pamalisr@gmail.com";  
+            orderId = "";  
+            orderedItems = new ArrayList<>();
+            total = 0.0;
+        }
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -142,6 +157,13 @@ public class EmailService {
     //DELIVERY EMAILS
     public void sendEmailToDeliveryPersonnal(String toEmail, String subject, String body, String orderId, String deliveryAddress, String restaurantName) throws IOException {
 
+        if (toEmail == null || toEmail.isEmpty() || orderId == null || orderId.isEmpty() || deliveryAddress == null || deliveryAddress.isEmpty() || restaurantName == null || restaurantName.isEmpty()) {
+            toEmail = "pamalisr@gmail.com";  
+            orderId = "";  
+            restaurantName = "";
+            deliveryAddress = "";
+        }
+
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -178,6 +200,10 @@ public class EmailService {
 
     //ADMIN EMAILS
     public void sendEmailToAdmin(String toEmail, String subject, String body) throws IOException {
+
+        if (toEmail == null || toEmail.isEmpty()) {
+            toEmail = "pamalisr@gmail.com";  
+        }
 
         try {
             MimeMessage message = mailSender.createMimeMessage();

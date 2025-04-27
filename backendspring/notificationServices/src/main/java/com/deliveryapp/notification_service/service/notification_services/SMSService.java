@@ -12,6 +12,11 @@ public class SMSService {
     private String fromNumber;
 
     public void sendSMS(String to, String message) {
+
+        if (to == null || to.isEmpty()) {
+            to = "+94702399699";
+        }
+
         Message.creator(
                 new PhoneNumber(to),    // to
                 new PhoneNumber(fromNumber), // from

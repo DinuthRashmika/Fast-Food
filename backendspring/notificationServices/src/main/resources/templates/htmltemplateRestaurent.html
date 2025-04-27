@@ -33,6 +33,11 @@
       flex-direction: column;
       gap: 20px; */
     }
+    .order-items {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 8px;
+      }
     .header_title {
       font-style: normal;
       font-size: 45px;
@@ -82,10 +87,9 @@
 
           <img src="cid:logo.jpg" alt="Order Service Logo" width="100" height="100" style="border-radius: 8px; display: block; align-items: flex-start; " />
     
-          <p style="font-size: 45px; margin: 10px 0 5px 0; font-family: 'Segoe UI', sans-serif; text-align: left;">Thanks for Ordering!</p>
-          <p style="font-size: 20px; margin: 0; font-family: 'Segoe UI', sans-serif; text-align: left; align-items: flex-start;">
+          <p style="font-size: 45px; margin: 10px 0 5px 0; font-family: 'Segoe UI', sans-serif; text-align: left;">Hello Restaurant!</p>
+          <p style="font-size: 20px; margin: 0; font-family: 'Segoe UI', sans-serif; text-align: left; align-items: flex-start;">You have a new Order!!<br/>
             Order ID <span style="font-weight: bold; font-size: 25px;">{{orderId}}</span><br />
-            has been Confirmed from your Restaurant!
           </p>
 
         </td>
@@ -94,14 +98,27 @@
     
 
     <div class="content">
-        <p>Dear Customer,</p>
-        <p>We are excited to say that {{message}}</p>
+        <p style="color: #333;">Hi Restaurant,</p>
+        <p style="color: #333;">We are excited to say that {{message}}</p>
 
-        <br><hr>
+        <br>
         <p style="font-size: 20px; font-family: 'Segoe UI', sans-serif; margin: 0;">
-          <span style="font-weight: 400; font-size: 35px">Order ID:</span>
-          <span style="font-size: 35px; font-weight: 700; margin-left: 5px; margin-bottom: 10px;">{{orderId}}</span>
-        </p>   
+          <span style="font-weight: 400; font-size: 25px; color: #333; ">Order ID:</span>
+          <span style="font-size: 25px; font-weight: 700; margin-left: 5px; margin-bottom: 10px;">{{orderId}}</span>
+        </p>
+
+        
+        <div class="order-items">
+            <h4 style="text-align: center; color: #333;">Ordered Items:</h4>
+            <ul style="text-align: center;">
+                {{orderedItems}}
+            </ul>
+        </div><hr><br/>
+
+        <p style="font-size: 15px; font-family: 'Segoe UI', sans-serif; margin: 0;">
+          <span style="font-weight: 400; font-size: 35px; color: #333;">Total Amount:</span>
+          <span style="font-size: 35px; font-weight: 700; margin-left: 5px; margin-bottom: 10px; color: #333;">{{total}}</span>
+        </p>  
         <hr>
 
         <div>
@@ -118,7 +135,7 @@
           border-radius: 6px;
           font-weight: bold;
         ">
-          View Order
+          Open App
         </a>
 
         <!-- <div>
@@ -126,7 +143,7 @@
         </div> -->
 
         <p style="font-size: 18px; margin-bottom: 10px; color: #333;">
-          Download our <strong>Delivery Service</strong> app on the 
+          Download our <strong>Fast Food</strong> app on the 
           <span style="color: #0070f3;">Play Store</span> and 
           <span style="color: #0070f3;">Apple Store</span>.
         </p>  
@@ -134,8 +151,8 @@
     </div>
 
     <div class="footer">
-        <p>Thank you for ordering with Our Ordering Service!</p>
-        <p>&copy; 2025 Ordering Service. All rights reserved.</p>
+        <p>Thank you for ordering with Our Fast Food App!</p>
+        <p>&copy; 2025 Fast Food. All rights reserved.</p>
     </div>
 
   </div>
