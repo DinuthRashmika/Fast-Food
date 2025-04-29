@@ -15,6 +15,7 @@ public class TrackingController {
     @Autowired
     private TrackingService trackingService;
 
+    // check deliver id and see lication of the customer side
     @PostMapping("/{deliveryId}/location")
     public ResponseEntity<Void> updateLocation(
             @PathVariable String deliveryId,
@@ -23,6 +24,7 @@ public class TrackingController {
         return ResponseEntity.ok().build();
     }
 
+    // deliver tracking of customer side
     @GetMapping("/{deliveryId}")
     public ResponseEntity<TrackingDTO> getTrackingInfo(@PathVariable String deliveryId) {
         // In a real system, we would fetch the current tracking info from the database

@@ -15,18 +15,19 @@ public class DeliveryController {
     @Autowired
     private DeliveryService deliveryService;
 
+    //create delivery
     @PostMapping
     public ResponseEntity<Delivery> createDelivery(@RequestBody DeliveryDTO deliveryDTO) {
         Delivery delivery = deliveryService.createDelivery(deliveryDTO);
         return ResponseEntity.ok(delivery);
     }
-
+// assign drivers
     @PutMapping("/{id}/assign")
     public ResponseEntity<Delivery> assignDriver(@PathVariable String id) {
         Delivery delivery = deliveryService.assignDriver(id);
         return ResponseEntity.ok(delivery);
     }
-
+// get delivery details
     @GetMapping("/{id}")
     public ResponseEntity<Delivery> getDelivery(@PathVariable String id) {
         return deliveryService.getDelivery(id)
@@ -34,6 +35,7 @@ public class DeliveryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // can see the all delivery details of driver side
     @GetMapping
     public ResponseEntity<Iterable<Delivery>> getAllDeliveries() {
         return ResponseEntity.ok(deliveryService.getAllDeliveries());
