@@ -17,8 +17,8 @@
     <module>userServices</module>
     <module>restaurantServices</module>
       <module>orderServices</module>
-    <module>deliveryService</module>
       <module>notificationServices</module>
+    <module>deliverySerice</module>
   </modules>
   <build>
     <plugins>
