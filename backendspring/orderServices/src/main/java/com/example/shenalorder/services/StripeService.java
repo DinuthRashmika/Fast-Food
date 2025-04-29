@@ -19,7 +19,7 @@ public class StripeService {
     @Value("${stripe.secretKey:}")
     private String secretKey;
 
-    @Value("${app.baseUrl:http://localhost:8080}")
+    @Value("${app.baseUrl:http://localhost:8084}")
     private String baseUrl;
 
     @PostConstruct

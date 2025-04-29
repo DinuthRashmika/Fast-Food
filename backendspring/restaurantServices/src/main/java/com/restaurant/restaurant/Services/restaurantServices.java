@@ -42,14 +42,14 @@ public class restaurantServices {
 
         Boolean isTaken = webClient.get()
                 .uri("/api/v1/auth/checkEmailAvailability/{username}", username)
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization", token)
                 .retrieve()
                 .bodyToMono(Boolean.class)
                 .block();
 
         Boolean isExist = webClient.get()
                 .uri("/api/v1/auth/emailavailable/{email}", email)
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization",  token)
                 .retrieve()
                 .bodyToMono(Boolean.class)
                 .block();
@@ -78,7 +78,7 @@ public class restaurantServices {
 
             webClient.post()
                     .uri("/api/v1/auth/cusregister")
-                    .header("Authorization", "Bearer " + token)
+                    .header("Authorization",  token)
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(userInfo)
                     .retrieve()
@@ -132,7 +132,7 @@ public class restaurantServices {
 
         List<resOrderDetailDTO> data = orderServiceWebClient.get()
                 .uri("http://localhost:8084/api/orders/restaurants/{id}", id)
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization", token)
                 .retrieve()
                 .bodyToFlux(resOrderDetailDTO.class)
                 .collectList()

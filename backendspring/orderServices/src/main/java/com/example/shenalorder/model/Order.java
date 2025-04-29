@@ -19,7 +19,7 @@ public class Order {
     private String customerId;
     private String restaurantId;
     private List<OrderItem> items;
-    private double totalPrice;
+    private Long totalPrice;
     private OrderStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

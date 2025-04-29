@@ -10,7 +10,7 @@ public class OrderDto {
     private List<OrderItemDto> items;
     private String deliveryAddress;
     private String specialInstructions;
-    private String totalPrice;
+    private Long totalPrice;
     private String phoneNumber;       // New field
     private String deliveryTimeSlot;  // New field
 }

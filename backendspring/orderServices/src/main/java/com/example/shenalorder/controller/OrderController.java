@@ -128,7 +128,7 @@ public class OrderController {
             }
 
             ProductRequest productRequest = new ProductRequest();
-            productRequest.setAmount((long) (order.getTotalPrice() * 100));
+            productRequest.setAmount(order.getTotalPrice());
             productRequest.setQuantity(1L);
             productRequest.setName("Order #" + order.getId());
             productRequest.setCurrency("USD");
