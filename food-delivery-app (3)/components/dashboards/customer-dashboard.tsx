@@ -698,7 +698,7 @@ const createOrder = async () => {
       {/* Sidebar */}
       <div className="fixed inset-y-0 left-0 w-64 bg-black text-white p-4">
         <div className="flex items-center justify-center h-16 mb-8">
-          <h1 className="text-xl font-bold">Food Delivery</h1>
+          <h1 className="text-xl font-bold">Speed Fast Food </h1>
         </div>
         <nav className="space-y-2">
           <Button

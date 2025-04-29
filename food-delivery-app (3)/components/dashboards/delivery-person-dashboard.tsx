@@ -7,6 +7,7 @@ import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { LogOut, Bell, MapPin, Truck, History, DollarSign, User, Settings } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
+// @ts-ignore
 export default function DeliveryPersonDashboard({ user }) {
   const [activeTab, setActiveTab] = useState("active")
 
