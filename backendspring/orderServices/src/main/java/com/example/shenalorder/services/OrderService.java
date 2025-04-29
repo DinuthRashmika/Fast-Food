@@ -24,6 +24,7 @@ public class OrderService {
         order.setRestaurantId(orderDto.getRestaurantId());
         order.setDeliveryAddress(orderDto.getDeliveryAddress());
         order.setSpecialInstructions(orderDto.getSpecialInstructions());
+        order.setTotalPrice(orderDto.getTotalPrice());
         order.setPhoneNumber(orderDto.getPhoneNumber()); // ✅ added
         order.setDeliveryTimeSlot(orderDto.getDeliveryTimeSlot()); // ✅ added
         order.setStatus(OrderStatus.CREATED);
@@ -37,17 +38,11 @@ public class OrderService {
                     item.setMenuItemId(itemDto.getMenuItemId());
                     item.setQuantity(itemDto.getQuantity());
                     item.setName("Item " + itemDto.getMenuItemId()); // Placeholder
-                    item.setPrice(itemDto.getTotalPrice()); // Example price
                     return item;
                 })
                 .collect(Collectors.toList());
 
         order.setItems(items);
-
-        double total = items.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
-                .sum();
-        order.setTotalPrice(total);
 
         StatusHistory statusHistory = new StatusHistory();
         statusHistory.setId(UUID.randomUUID().toString());
@@ -93,8 +88,8 @@ public class OrderService {
 
             order.setItems(items);
 
-            double total = items.stream()
-                    .mapToDouble(item -> item.getPrice() * item.getQuantity())
+            Long total = items.stream()
+                    .mapToLong(item -> (long) (item.getPrice() * item.getQuantity()))
                     .sum();
             order.setTotalPrice(total);
         }
@@ -160,8 +155,8 @@ public class OrderService {
         order.setItems(updatedItems);
         order.setUpdatedAt(LocalDateTime.now());
 
-        double updatedTotal = updatedItems.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+        Long updatedTotal = updatedItems.stream()
+                .mapToLong(item -> (long) (item.getPrice() * item.getQuantity()))
                 .sum();
         order.setTotalPrice(updatedTotal);
 

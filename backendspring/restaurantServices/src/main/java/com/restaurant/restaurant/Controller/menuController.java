@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/v1/menu")
+
 public class menuController {
 
     @Autowired
@@ -25,14 +27,14 @@ public class menuController {
         return ResponseEntity.ok(menuServices.getAllMenus());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/update/{id}")
     public ResponseEntity<menuModel> getMenuById(@PathVariable Long id) {
         return menuServices.getMenuById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMenu(@PathVariable Long id) {
         menuServices.deleteMenu(id);
         return ResponseEntity.ok("Menu deleted successfully");
