@@ -62,6 +62,7 @@ public class AuthController {
     @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('ROLE_RESTAURANT_ADMIN')")
     public void deleteRestaurant(@RequestBody Integer id) {
+
         userRepository.deleteById(Long.valueOf(id));
     }
 
