@@ -1,27 +1,78 @@
-## Microservices Overview
+🔍 Microservices Overview
+This system is composed of multiple independent services, each responsible for a specific domain in the food ordering and delivery workflow. Here’s what each does:
 
-- *User Service* – Handles user registration, login, and JWT authentication.
-- *Order Service* – Manages order placement, tracking, and order history.
-- *Restaurant Service* – Maintains restaurant details, menus, and updates.
-- *Delivery Service* – Coordinates delivery assignments and status updates.
-- *Notification Service* – Sends email and SMS alerts for order confirmations and updates.
-- *Client (Frontend)* – A web-based user interface for customers, admins, delivery persons and restaurant owners
+✅ User Service
+Handles user registration, login, and authentication.
 
+Uses JWT (JSON Web Tokens) to securely manage user sessions.
 
-## Deployment Using Docker & Docker Compose
-### Pre-requisites
+All user-related data and actions (like registration and login) are centralized here.
 
-Install Docker and Docker Compose
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/)
+📦 Order Service
+Responsible for placing new orders, tracking them, and maintaining order history.
 
-### Steps to Deploy the System
-- git clone https://github.com/your-username/food-ordering-system.git
-- cd food-ordering-system
+Interacts with the Restaurant Service to confirm items, and with Delivery Service to assign delivery.
 
-### Build and run
-docker-compose up --build
-This will Build Docker images for all microservices, start containers for services and databases, map service ports to localhost for testing and starts running
+🍽️ Restaurant Service
+Manages all restaurant-related data:
 
-### Stop all services
-docker-compose down
+Restaurant profiles
+
+Menus and menu items
+
+Updates to offerings
+
+Can be accessed and updated by restaurant owners.
+
+🚚 Delivery Service
+Manages delivery assignments:
+
+Finds nearby delivery persons
+
+Tracks delivery progress and updates order status
+
+📢 Notification Service
+Sends emails or SMS messages:
+
+Order confirmations
+
+Delivery updates
+
+Can be implemented using services like Twilio, SendGrid, or SMTP servers
+
+🌐 Client (Frontend)
+A web application (likely using React, Angular, or Vue).
+
+Offers different dashboards/interfaces for:
+
+Customers (place orders, track them)
+
+Admins (manage users, restaurants, delivery persons)
+
+Restaurant owners (manage menus, orders)
+
+Delivery persons (accept and complete deliveries)
+
+Each of these services communicates over HTTP (REST APIs) or asynchronous messaging (like RabbitMQ/Kafka), but they are deployed and scaled independently.
+
+🐳 Deployment Using Docker & Docker Compose
+🔧 Pre-requisites
+To deploy this system, you need two tools:
+
+Docker
+
+Allows you to package applications and their dependencies into containers.
+
+Ensures that the app runs the same way on any system.
+
+Docker Compose
+
+A tool to define and manage multi-container Docker applications.
+
+It uses a file called docker-compose.yml to describe services, networks, and volumes.
+
+🔗 Installation links are provided:
+
+Docker
+
+Docker Compose
